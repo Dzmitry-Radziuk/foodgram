@@ -1,4 +1,7 @@
-
+volumes:
+  pgdata:
+  static:
+  media:
 
 services:
   db:
@@ -6,14 +9,9 @@ services:
     container_name: foodgram-db
     env_file:
       - ../backend/.env
-    ports:
-      - "5432:5432"  
 
     volumes:
       - pgdata:/var/lib/postgresql/data
-    restart: always
-    networks:
-      - infra_default
 
   backend:
     build:
@@ -29,17 +27,12 @@ services:
       - db
     command: sh entrypoint.sh
 
-    networks:
-      - infra_default
-
   frontend:
     container_name: foodgram-front
     build: ../frontend
     volumes:
       - ../frontend/build:/app/result_build/
-    networks:
-      - infra_default
-
+ 
   nginx:
     image: nginx:1.25.4-alpine
     container_name: foodgram-proxy
@@ -54,13 +47,6 @@ services:
       - ../docs:/usr/share/nginx/html/api/docs/
       - static:/usr/share/nginx/html/backend_static/
       - media:/usr/share/nginx/html/media/
-    networks:
-      - infra_default
 
-volumes:
-  pgdata:
-  static:
-  media:
 
-networks:
-  infra_default:
+

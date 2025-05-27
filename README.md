@@ -58,11 +58,14 @@ DB_PORT=5432
 ```bash
 docker compose -f docker-compose.yml up -d --build
 ```
-После старта выполните миграции и сбор статики:
+Для автоматического применения миграций, сбора статики и наполнения базы данных ингредиентами и тегами используется скрипт backend/entrypoint.sh.
+Если по каким-то причинам необходимо выполнить эти шаги вручную, можно выполнить следующие команды:
 ```bash
 docker compose -f docker-compose.production.yml exec backend python manage.py migrate
 docker compose -f docker-compose.production.yml exec backend python manage.py collectstatic --noinput
 docker compose -f docker-compose.production.yml exec backend cp -r /app/collected_static/. /backend_static/static/
+docker compose -f docker-compose.production.yml exec backend python manage.py load_ingredients
+docker compose -f docker-compose.production.yml exec backend python manage.py load_tags
 ```
 Перейдите на https://<ваш_домен> — приложение доступно!
 

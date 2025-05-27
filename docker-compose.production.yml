@@ -33,8 +33,6 @@ services:
   nginx:
     image: radziukdzmitry/foodgram_nginx
     container_name: foodgram-proxy
-    ports:
-      - "9000:80"
     depends_on:
       - backend
       - frontend
@@ -42,4 +40,5 @@ services:
       - result_build:/usr/share/nginx/html/
       - static:/usr/share/nginx/html/backend_static/
       - media:/usr/share/nginx/html/media/
+      - ../docs:/usr/share/nginx/html/api/docs/
 

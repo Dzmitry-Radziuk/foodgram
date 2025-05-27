@@ -1,7 +1,6 @@
 from django.urls import include, path
-from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView
 from rest_framework.routers import DefaultRouter
-
+from django.views.generic import TemplateView
 from api.views import IngredientViewSet, RecipeViewSet, TagViewSet, UserViewSet
 
 
@@ -15,8 +14,5 @@ router.register('ingredients', IngredientViewSet, basename='ingredient')
 urlpatterns = [
     path('', include(router.urls)),
     path('auth/', include('djoser.urls.authtoken')),
-    path('schema/', SpectacularAPIView.as_view(), name='schema'),
-    path(
-        'docs/',
-        SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+    
 ]
