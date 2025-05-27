@@ -69,7 +69,7 @@ class Ingredient(models.Model):
         name = Truncator(self.name).chars(constants.MAX_LENGTH_STR)
         measurement_unit = Truncator(
             self.measurement_unit).chars(
-                constants.MAX_LENGTH_STR_MEASUREMENT_UNIT)
+                constants.MAX_LENGTH_STR)
         return f'{name}, {measurement_unit}'
 
 
