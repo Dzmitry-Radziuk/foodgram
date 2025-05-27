@@ -153,6 +153,16 @@ jobs:
           source: ".env"
           target: "foodgram/infra/"
 
+      - name: Copy docs folder to server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_KEY }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
+          source: "docs"
+          target: "foodgram/"
+
       - name: Deploy containers on server
         uses: appleboy/ssh-action@master
         with:
