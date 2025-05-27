@@ -1,0 +1,45 @@
+volumes:
+  pgdata:
+  static:
+  media:
+  result_build:
+services:
+  db:
+    image: postgres:15
+    container_name: foodgram-db
+    env_file:
+      - .env  
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  backend:
+    image: radziukdzmitry/foodgram_backend
+    container_name: foodgram-backend
+    env_file:
+      - .env
+    volumes:
+      - static:/app/staticfiles
+      - media:/app/mediafiles
+    depends_on:
+      - db
+    command: >
+      sh entrypoint.sh
+  frontend:
+    image: radziukdzmitry/foodgram_frontend
+    container_name: foodgram-frontend
+    volumes:
+      - result_build:/app/result_build/
+
+  nginx:
+    image: radziukdzmitry/foodgram_nginx
+    container_name: foodgram-proxy
+    ports:
+      - "9000:80"
+    depends_on:
+      - backend
+      - frontend
+    volumes:
+      - result_build:/usr/share/nginx/html/
+      - static:/usr/share/nginx/html/backend_static/
+      - media:/usr/share/nginx/html/media/
+
