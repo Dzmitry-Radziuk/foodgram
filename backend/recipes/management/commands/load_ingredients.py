@@ -8,7 +8,7 @@ from recipes.models import Ingredient
 
 
 class Command(BaseCommand):
-    help = 'Загружает ингредиенты из CSV файла'
+    """Менеджер для загрузки ингредиентов в БД."""
 
     def add_arguments(self, parser):
         parser.add_argument(

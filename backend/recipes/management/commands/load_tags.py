@@ -9,7 +9,6 @@ from recipes.models import Tag
 
 class Command(BaseCommand):
     """Менеджер для загрузки тегов в БД."""
-    help = 'Загружает теги из CSV файла'
 
     def add_arguments(self, parser):
         parser.add_argument(
