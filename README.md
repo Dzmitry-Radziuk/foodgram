@@ -132,4 +132,4 @@ pytest backend/tests/
  - ReDoc:       `https://localhost/api/docs/`  
 
 Автор:
-Дмитрий Радюк — Python-разработчик GitHub: Dzmitry-Radziuk
+Дмитрий Радюк — Python-разработчик GitHub: Dzmitry-Radziuk.
