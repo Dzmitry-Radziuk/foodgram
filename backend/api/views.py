@@ -36,15 +36,7 @@ User = get_user_model()
 
 
 class UserViewSet(DjoserUserViewSet):
-    """
-    Вьюсет для работы с пользователями.
-
-    Обеспечивает:
-    - просмотр и поиск пользователей;
-    - обновление и удаление аватара текущего пользователя;
-    - подписку и отписку на других пользователей;
-    - вывод списка подписок с пагинацией.
-    """
+    """Вьюсет для работы с пользователями."""
 
     serializer_class = serializers.UserSerializer
     lookup_field = 'pk'
@@ -58,14 +50,7 @@ class UserViewSet(DjoserUserViewSet):
         return User.objects.prefetch_related('subscriptions').all()
 
     def get_serializer_class(self):
-        """
-        Определяет класс сериализатора в зависимости от действия и HTTP-метода.
-
-        Использует разные сериализаторы для:
-        - обновления аватара;
-        - операций с подписками;
-        - стандартных операций просмотра.
-        """
+        """Определяет класс сериализатора."""
         if self.action == 'avatar' and self.request.method == 'PUT':
             return serializers.UserAvatarSerializer
         if self.action in ['list', 'retrieve', 'me']:
@@ -77,12 +62,7 @@ class UserViewSet(DjoserUserViewSet):
         return super().get_serializer_class()
 
     def get_permissions(self):
-        """
-        Возвращает список классов разрешений в зависимости от действия.
-
-        Разрешает открытый доступ для просмотра списка и деталей пользователей,
-        остальные действия требуют аутентификации.
-        """
+        """Возвращает список классов разрешений в зависимости от действия."""
         if self.action in ['list', 'retrieve']:
             return [AllowAny()]
         if self.action in ['me', 'subscriptions', 'subscribe', 'avatar']:
@@ -91,12 +71,7 @@ class UserViewSet(DjoserUserViewSet):
 
     @action(detail=False, methods=['put', 'delete'], url_path='me/avatar')
     def avatar(self, request):
-        """
-        Обработка PUT-запроса для обновления аватара и DELETE-запроса.
-
-        В случае успешного обновления возвращает сериализованные данные,
-        при удалении — HTTP 204, если аватара нет — ошибку 400.
-        """
+        """Обработка PUT-запроса для обновления аватара и DELETE-запроса."""
         user = request.user
 
         if request.method == 'PUT':
@@ -115,14 +90,7 @@ class UserViewSet(DjoserUserViewSet):
 
     @action(detail=True, methods=['post', 'delete'], url_path='subscribe')
     def subscribe(self, request, pk=None):
-        """
-        Подписка (POST) или отписка (DELETE) текущего пользователя.
-
-        При подписке создаётся запись в подписках
-        и возвращаются данные подписки,
-        при отписке — удаляется запись и возвращается HTTP 204.
-        Если отписка невозможна, возвращается ошибка 400.
-        """
+        """Подписка (POST) или отписка (DELETE) текущего пользователя."""
         user = request.user
         author = get_object_or_404(User, pk=pk)
 
@@ -170,12 +138,7 @@ class ShortLinkRedirectView(APIView):
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
-    """
-    Вьюсет для CRUD операций с рецептами.
-
-    Позволяет фильтровать, искать, сортировать рецепты,
-    а также управлять избранным и корзиной.
-    """
+    """Вьюсет для CRUD операций с рецептами."""
 
     queryset = Recipe.objects.all()
     permission_classes = [IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]

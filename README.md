@@ -129,7 +129,8 @@ pytest backend/tests/
 Находясь в папке infra, выполните команду docker-compose up. 
 Полная документация доступна по следующим маршрутам:
 
- - ReDoc:       `https://localhost/api/docs/`  
-
+ - ReDoc: [Открыть документацию](https://foodgram.webhop.me/api/docs)
+ - Сайт: [Открыть сайт проекта](https://foodgram.webhop.me)
+ 
 Автор:
-Дмитрий Радюк — Python-разработчик GitHub: Dzmitry-Radziuk.
+Дмитрий Радюк — Python-разработчик GitHub: Dzmitry-Radziuk
