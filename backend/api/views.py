@@ -118,7 +118,8 @@ class UserViewSet(DjoserUserViewSet):
     def subscriptions(self, request):
         """Возвращает список подписок текущего пользователя с пагинацией."""
         user = request.user
-        authors = User.objects.filter(subscriptions__user=user).order_by('-id')
+        authors = User.objects.filter(
+            subscribers__user=user).order_by('-id')
         paginated_authors = self.paginate_queryset(authors)
         serializer = self.get_serializer(
             paginated_authors, many=True, context={'request': request}

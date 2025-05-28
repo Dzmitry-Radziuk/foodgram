@@ -25,7 +25,6 @@ class RecipeFilter(filters.FilterSet):
         widget=BooleanWidget()
     )
     tags = filters.AllValuesMultipleFilter(field_name='tags__slug')
-    author = filters.NumberFilter(field_name='author__id')
 
     class Meta:
         model = Recipe

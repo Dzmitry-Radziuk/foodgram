@@ -2,20 +2,35 @@ from core import constants
 from django.contrib import admin
 from django.db.models import Count
 
-from recipes.models import Ingredient, Recipe, RecipeIngredient, Tag
+from recipes import models
 
 
 class RecipeIngredientInline(admin.TabularInline):
     """Inline-админ для модели RecipeIngredient."""
-
-    model = RecipeIngredient
+    model = models.RecipeIngredient
     extra = constants.ADMIN_EXTRA
     min_num = constants.ADMIN_MIN_NUM
     verbose_name = 'Ингредиент в рецепте'
     verbose_name_plural = 'Ингредиенты в рецепте'
 
 
-@admin.register(Recipe)
+class FavoriteInline(admin.TabularInline):
+    """Inline-админ для избранных рецептов."""
+    model = models.Favorite
+    extra = 0
+    verbose_name = 'Добавивший в избранное'
+    verbose_name_plural = 'Пользователи, добавившие в избранное'
+
+
+class ShoppingCartInline(admin.TabularInline):
+    """Inline-админ для рецептов в корзине."""
+    model = models.ShoppingCart
+    extra = 0
+    verbose_name = 'Добавивший в корзину'
+    verbose_name_plural = 'Пользователи, добавившие в корзину'
+
+
+@admin.register(models.Recipe)
 class RecipeAdmin(admin.ModelAdmin):
     """Админ-класс для модели Recipe."""
 
@@ -38,14 +53,19 @@ class RecipeAdmin(admin.ModelAdmin):
         'created_at',
     )
     ordering = ('-created_at',)
-    inlines = [RecipeIngredientInline]
+    inlines = [
+        RecipeIngredientInline,
+        FavoriteInline,
+        ShoppingCartInline
+    ]
     list_per_page = constants.LIST_PER_PAGE
 
     def get_queryset(self, request):
         """Возвращает расширенный queryset с аннотациями."""
         queryset = super().get_queryset(request)
         return queryset.select_related(
-            'author').prefetch_related('tags').annotate(
+            'author'
+        ).prefetch_related('tags').annotate(
             favorited_by_count=Count('favorites', distinct=True),
             in_shopping_cart_count=Count('shopping_carts', distinct=True),
         )
@@ -67,7 +87,7 @@ class RecipeAdmin(admin.ModelAdmin):
         return obj.in_shopping_cart_count
 
 
-@admin.register(Ingredient)
+@admin.register(models.Ingredient)
 class IngredientAdmin(admin.ModelAdmin):
     """Админ-класс для модели Ingredient."""
 
@@ -78,7 +98,7 @@ class IngredientAdmin(admin.ModelAdmin):
     list_per_page = constants.LIST_PER_PAGE
 
 
-@admin.register(Tag)
+@admin.register(models.Tag)
 class TagAdmin(admin.ModelAdmin):
     """Админ-класс для модели Tag."""
 
@@ -86,3 +106,23 @@ class TagAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug')
     prepopulated_fields = {'slug': ('name',)}
     ordering = ('name',)
+
+
+@admin.register(models.Favorite)
+class FavoriteAdmin(admin.ModelAdmin):
+    """Админ-класс для модели Favorite."""
+
+    list_display = ('user', 'recipe')
+    search_fields = ('user__username', 'recipe__name')
+    list_filter = ('user',)
+    ordering = ('user',)
+
+
+@admin.register(models.ShoppingCart)
+class ShoppingCartAdmin(admin.ModelAdmin):
+    """Админ-класс для модели ShoppingCart."""
+
+    list_display = ('user', 'recipe')
+    search_fields = ('user__username', 'recipe__name')
+    list_filter = ('user',)
+    ordering = ('user',)

@@ -108,7 +108,7 @@ class Recipe(models.Model):
     cooking_time = models.PositiveSmallIntegerField(
         validators=[MinValueValidator(constants.MIN_COOKING_TIME)],
         verbose_name='Время приготовления (в минутах)',
-        help_text=(f'Введите время приготовления в минутах'
+        help_text=('Введите время приготовления в минутах'
                    f'(минимум {constants.MIN_COOKING_TIME} мин)')
     )
     image = models.ImageField(

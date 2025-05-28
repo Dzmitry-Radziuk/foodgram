@@ -202,11 +202,7 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
         validators = [validate_recipe_fields]
 
     def validate_image(self, value):
-        if (
-            self.instance is None and not value
-        ) or (
-            self.instance is not None and value in [None, '']
-        ):
+        if not value:
             raise serializers.ValidationError('Обязательное поле.')
         return value
 
@@ -237,13 +233,11 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
         ingredients = validated_data.pop('ingredients')
         tags = validated_data.pop('tags')
 
-        instance = super().update(instance, validated_data)
-
         instance.tags.set(tags)
         RecipeIngredient.objects.filter(recipe=instance).delete()
         self.create_ingredients(instance, ingredients)
 
-        return instance
+        instance = super().update(instance, validated_data)
 
     def to_representation(self, instance):
         return RecipeReadSerializer(instance, context=self.context).data
