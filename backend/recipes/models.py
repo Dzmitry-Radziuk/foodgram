@@ -240,8 +240,8 @@ class Favorite(models.Model):
         ]
 
     def __str__(self):
-        user = Truncator(self.user).chars(constants.MAX_LENGTH_STR)
-        recipe = Truncator(self.recipe).chars(constants.MAX_LENGTH_STR)
+        user = Truncator(str(self.user)).chars(constants.MAX_LENGTH_STR)
+        recipe = Truncator(str(self.recipe)).chars(constants.MAX_LENGTH_STR)
         return f'{user} добавил {recipe} в избранное'
 
 

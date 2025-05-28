@@ -6,6 +6,7 @@ from django.urls import reverse
 from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet as DjoserUserViewSet
 from rest_framework import status, viewsets
+
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.permissions import (
@@ -13,9 +14,9 @@ from rest_framework.permissions import (
     IsAuthenticated,
     IsAuthenticatedOrReadOnly,
 )
+from django.http import HttpResponseNotFound
 from rest_framework.response import Response
-from rest_framework.views import APIView
-
+from django.views import View
 from api import serializers
 from api.filters import IngredientFilter, RecipeFilter
 from api.pagination import LimitPageNumberPagination
@@ -127,15 +128,19 @@ class UserViewSet(DjoserUserViewSet):
         return self.get_paginated_response(serializer.data)
 
 
-class ShortLinkRedirectView(APIView):
-    """Представление для редиректа по короткой ссылке рецепта."""
-
-    permission_classes = [AllowAny]
+class ShortLinkRedirectView(View):
+    """Редирект на страницу рецепта по короткой ссылке."""
 
     def get(self, request, short_code):
-        recipe = get_object_or_404(Recipe, short_code=short_code)
-        url = reverse('recipe-detail', kwargs={'pk': recipe.id})
-        return redirect(url)
+        try:
+            recipe = Recipe.objects.get(short_code=short_code)
+        except Recipe.DoesNotExist:
+            return HttpResponseNotFound('Рецепт не существует!')
+
+        frontend_base_url = request.scheme + '://' + request.get_host()
+
+        redirect_url = f'{frontend_base_url}/recipes/{recipe.id}/'
+        return redirect(redirect_url)
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
@@ -158,11 +163,11 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['get'], url_path='get-link')
     def get_short_link(self, request, pk=None):
-        """Возвращает полную короткую ссылку на рецепт."""
+        """Возвращает короткую ссылку на рецепт."""
         recipe = self.get_object()
-        relative_url = reverse(
-            'short-link', kwargs={'short_code': recipe.short_code})
-        short_url = request.build_absolute_uri(relative_url)
+        short_url = request.build_absolute_uri(
+            reverse('short-link', args=[recipe.short_code])
+        )
         return Response({'short-link': short_url})
 
     @action(

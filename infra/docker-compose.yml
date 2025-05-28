@@ -26,6 +26,8 @@ services:
     depends_on:
       - db
     command: sh entrypoint.sh
+    ports:
+      - "8000:8000"
 
   frontend:
     container_name: foodgram-front
