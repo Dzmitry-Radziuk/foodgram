@@ -1,12 +1,12 @@
 from django.contrib.auth import get_user_model
 from django.db.models import Sum
-from django.http import FileResponse
+from django.http import FileResponse, HttpResponseNotFound
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
+from django.views import View
 from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet as DjoserUserViewSet
 from rest_framework import status, viewsets
-
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.permissions import (
@@ -14,9 +14,8 @@ from rest_framework.permissions import (
     IsAuthenticated,
     IsAuthenticatedOrReadOnly,
 )
-from django.http import HttpResponseNotFound
 from rest_framework.response import Response
-from django.views import View
+
 from api import serializers
 from api.filters import IngredientFilter, RecipeFilter
 from api.pagination import LimitPageNumberPagination
