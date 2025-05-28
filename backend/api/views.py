@@ -133,9 +133,9 @@ class ShortLinkRedirectView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request, short_code):
-        """Редирект на рецепт по короткому коду."""
         recipe = get_object_or_404(Recipe, short_code=short_code)
-        return redirect(f'/recipes/{recipe.id}/')
+        url = reverse('recipe-detail', kwargs={'pk': recipe.id})
+        return redirect(url)
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
