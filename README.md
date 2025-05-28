@@ -124,4 +124,4 @@ pytest backend/tests/
 
 ## 👨‍💻 Автор
 
-Дмитрий Радюк — Python-разработчик GitHub: Dzmitry-Radziuk
+Дмитрий Радюк — Python-разработчик GitHub: [Dzmitry Radziuk](https://github.com/Dzmitry-Radziuk)
