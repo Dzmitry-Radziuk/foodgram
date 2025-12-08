@@ -119,9 +119,11 @@ pytest backend/tests/
 
 ## 📚 Документация API
 
- - ReDoc: [Открыть документацию](https://foodgram.webhop.me/api/docs)
- - Сайт: [Открыть сайт проекта](https://foodgram.webhop.me)
+- [ReDoc: Открыть документацию](https://foodgram.webhop.me/api/docs)
+- [Сайт проекта](https://foodgram.webhop.me)
 
 ## 👨‍💻 Автор
 
-Дмитрий Радюк — Python-разработчик GitHub: [Dzmitry Radziuk](https://github.com/Dzmitry-Radziuk)
+Дмитрий Радюк — Python-разработчик  
+[GitHub: Dzmitry-Radziuk](https://github.com/Dzmitry-Radziuk)
+
